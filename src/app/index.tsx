@@ -1,165 +1,146 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
 import { Zap } from 'lucide-react-native';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 
-// Let's define the colors you used in your web design
-const COLORS = {
-  background: '#0F172A',
-  text: '#FFFFFF',     // Assuming C.text was white for a dark theme
-  muted: '#94A3B8',    // Assuming C.muted was slate-400
-  indigo: '#4F46E5',   // Primary indigo
-};
+const { width, height } = Dimensions.get('window');
 
-export default function SplashScreen() {
-  const router = useRouter();
-
+export default function OnboardingScreen() {
   return (
     <View style={styles.container}>
-      <View style={[styles.glow, { top: -100, left: -100, width: 400, height: 400 }]}>
-        <Svg height="100%" width="100%">
-          <Defs>
-            <RadialGradient id="grad1" cx="50%" cy="50%" rx="50%" ry="50%">
-              <Stop offset="0%" stopColor="rgba(79,70,229,0.25)" />
-              <Stop offset="70%" stopColor="transparent" />
-            </RadialGradient>
-          </Defs>
-          <Rect width="100%" height="100%" fill="url(#grad1)" />
-        </Svg>
-      </View>
-      {/* Bottom Right Glow */}
-      <View style={[styles.glow, { bottom: -80, right: -80, width: 300, height: 300 }]}>
-        <Svg height="100%" width="100%">
-          <Defs>
-            <RadialGradient id="grad2" cx="50%" cy="50%" rx="50%" ry="50%">
-              <Stop offset="0%" stopColor="rgba(34,197,94,0.15)" />
-              <Stop offset="70%" stopColor="transparent" />
-            </RadialGradient>
-          </Defs>
-          <Rect width="100%" height="100%" fill="url(#grad2)" />
-        </Svg>
-      </View>
-      <View style={styles.contentContainer}>
-        <View style={styles.logoShadow}>
-          <LinearGradient
-            colors={['#4F46E5', '#7C3AED']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.logoContainer}>
-            <Zap size={44} color="#FFF" strokeWidth={2.5} fill="#FFF" />
+      {/* Ambient background glows */}
+      <Svg height={height} width={width} style={StyleSheet.absoluteFill}>
+        <Defs>
+          <RadialGradient id="purpleGlow" cx="15%" cy="8%" r="55%">
+            <Stop offset="0%" stopColor="#5b4fd6" stopOpacity="0.35" />
+            <Stop offset="100%" stopColor="#5b4fd6" stopOpacity="0" />
+          </RadialGradient>
+          <RadialGradient id="greenGlow" cx="92%" cy="97%" r="45%">
+            <Stop offset="0%" stopColor="#2fae6b" stopOpacity="0.28" />
+            <Stop offset="100%" stopColor="#2fae6b" stopOpacity="0" />
+          </RadialGradient>
+        </Defs>
+        <Rect x="0" y="0" width={width} height={height} fill="url(#purpleGlow)" />
+        <Rect x="0" y="0" width={width} height={height} fill="url(#greenGlow)" />
+      </Svg>
+
+      {/* Center content */}
+      <View style={styles.content}>
+        <View style={styles.iconWrapper}>
+          <LinearGradient colors={['#8b7cf6', '#6c4fe0']} style={styles.iconBox}>
+            <Zap size={44} color="#fff" />
           </LinearGradient>
         </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>IntelliTracker</Text>
-          <Text style={styles.subtitle}>Your intelligent fitness companion</Text>
-        </View>
-        <View style={styles.dotsContainer}>
-          {[0, 1, 2].map(i => (
-            <View
-              key={i}
-              style={[
-                styles.dot,
-                { backgroundColor: i === 1 ? COLORS.indigo : 'rgba(79,70,229,0.3)' }
-              ]}
-            />
-          ))}
+
+        <Text style={styles.title}>IntelliTracker</Text>
+        <Text style={styles.subtitle}>Your intelligent fitness companion</Text>
+
+        <View style={styles.dotsRow}>
+          <View style={[styles.dot, styles.dotInactive]} />
+          <View style={[styles.dot, styles.dotActive]} />
+          <View style={[styles.dot, styles.dotInactive]} />
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.buttonShadow}
-        activeOpacity={0.8}
-        onPress={() => router.push('/')}
-      >
-        <LinearGradient
-          colors={['#4F46E5', '#6366F1']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.buttonContainer}
-        >
-          <Text style={styles.buttonText}>Get Started</Text>
-        </LinearGradient>
-      </TouchableOpacity>
+
+      {/* Bottom CTA */}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity activeOpacity={0.85} onPress={() => { }}>
+          <LinearGradient
+            colors={['#8b7cf6', '#6c4fe0']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Get Started</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // This is like height: "100%"
-    backgroundColor: COLORS.background,
-    alignItems: 'center',
+    flex: 1,
+    backgroundColor: '#0a0d1a',
+  },
+  content: {
+    flex: 1,
     justifyContent: 'center',
-  },
-  contentContainer: {
     alignItems: 'center',
-    gap: 24, // Replaces Tailwind's gap-6
+    paddingHorizontal: 32,
   },
-  logoShadow: {
-    // iOS Shadows
-    shadowColor: '#4F46E5',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.5,
-    shadowRadius: 20,
-    // Android Shadow
-    elevation: 15,
+  iconWrapper: {
+    marginBottom: 32,
+    shadowColor: '#7c5cf0',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.6,
+    shadowRadius: 24,
+    elevation: 12,
   },
-  logoContainer: {
+  iconBox: {
     width: 88,
     height: 88,
-    borderRadius: 28,
-    alignItems: 'center',
+    borderRadius: 24,
     justifyContent: 'center',
-  },
-  textContainer: {
     alignItems: 'center',
   },
   title: {
-    fontSize: 34,
+    fontSize: 30,
     fontWeight: '800',
-    color: COLORS.text,
-    letterSpacing: -0.5,
+    color: '#ffffff',
+    marginBottom: 10,
+    letterSpacing: 0.2,
   },
   subtitle: {
     fontSize: 15,
-    color: COLORS.muted,
-    marginTop: 8,
+    color: '#8a8fa3',
+    textAlign: 'center',
+    marginBottom: 28,
   },
-  dotsContainer: {
-    flexDirection: 'row', // Replaces flex-row
-    gap: 8, // Replaces gap-2
-    marginTop: 32, // Replaces mt-8
+  dotsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginHorizontal: 4,
+  },
+  dotInactive: {
+    backgroundColor: '#3a3d52',
+  },
+  dotActive: {
     width: 8,
     height: 8,
     borderRadius: 4,
-  },
-  glow: {
-    position: 'absolute',
-    pointerEvents: 'none', // Ensures glows don't block touches
-  },
-  buttonShadow: {
-    position: 'absolute',
-    bottom: 80,
-    // iOS Shadow
-    shadowColor: '#4F46E5',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.4,
-    shadowRadius: 24,
-    // Android Shadow
-    elevation: 8,
+    backgroundColor: '#8b7cf6',
   },
   buttonContainer: {
-    paddingVertical: 14,
-    paddingHorizontal: 48,
-    borderRadius: 16,
-    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingBottom: 48,
+  },
+  button: {
+    height: 56,
+    borderRadius: 28,
     justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#6c4fe0',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.45,
+    shadowRadius: 16,
+    elevation: 8,
   },
   buttonText: {
-    color: '#FFF',
-    fontWeight: '600',
-    fontSize: 16,
+    color: '#ffffff',
+    fontSize: 17,
+    fontWeight: '700',
   },
 });
