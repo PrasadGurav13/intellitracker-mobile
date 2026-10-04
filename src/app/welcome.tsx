@@ -52,7 +52,7 @@ export default function WelcomeScreen() {
         <TouchableOpacity 
           style={styles.primaryButtonShadow}
           activeOpacity={0.8}
-          onPress={() => router.push('/onboarding')}
+          onPress={() => router.push('/auth/register')}
         >
           <LinearGradient
             colors={['#4F46E5', '#6366F1']}
@@ -67,7 +67,7 @@ export default function WelcomeScreen() {
         <TouchableOpacity 
           style={styles.secondaryButton}
           activeOpacity={0.8}
-          onPress={() => router.push('/auth')}
+          onPress={() => router.push('/auth/login')}
         >
           <Text style={styles.secondaryButtonText}>Sign In</Text>
         </TouchableOpacity>
