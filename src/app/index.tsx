@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Zap } from 'lucide-react-native';
 import {
@@ -12,6 +13,7 @@ import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 const { width, height } = Dimensions.get('window');
 
 export default function OnboardingScreen() {
+  const router = useRouter();
   return (
     <View style={styles.container}>
       {/* Ambient background glows */}
@@ -50,7 +52,7 @@ export default function OnboardingScreen() {
 
       {/* Bottom CTA */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity activeOpacity={0.85} onPress={() => { }}>
+        <TouchableOpacity activeOpacity={0.85} onPress={() => router.push('/welcome')}>
           <LinearGradient
             colors={['#8b7cf6', '#6c4fe0']}
             start={{ x: 0, y: 0 }}
