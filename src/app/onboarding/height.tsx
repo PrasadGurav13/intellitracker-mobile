@@ -6,48 +6,50 @@ import { NumberSelector } from '../../components/ui/NumberSelector';
 import { PrimaryButton } from '../../components/ui/PrimaryButton';
 import { StepHeader } from '../../components/ui/StepHeader';
 
-export default function OnboardingWeight() {
+export default function OnboardingHeight() {
   const router = useRouter();
-  const [kg, setKg] = useState(75);
-  const [unit, setUnit] = useState<'kg' | 'lbs'>('kg');
+  const [cm, setCm] = useState(178);
+  const [unit, setUnit] = useState<'cm' | 'ft'>('cm');
+
+  const feetVal = `${Math.floor(cm / 30.48)}'${Math.round((cm % 30.48) / 2.54)}"`;
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <StepHeader
-          step={3}
+          step={2}
           total={5}
-          title="What's your weight?"
-          subtitle="Helps calculate calories burned and volume metrics."
+          title="What's your height?"
+          subtitle="Used for BMI and body measurements."
           onBack={() => router.back()}
         />
 
         <View style={styles.content}>
           <View style={styles.toggleContainer}>
             <TouchableOpacity
-              style={[styles.toggleBtn, unit === 'kg' && styles.toggleActive]}
-              onPress={() => setUnit('kg')}
+              style={[styles.toggleBtn, unit === 'cm' && styles.toggleActive]}
+              onPress={() => setUnit('cm')}
             >
-              <Text style={[styles.toggleText, unit === 'kg' && styles.toggleTextActive]}>kg</Text>
+              <Text style={[styles.toggleText, unit === 'cm' && styles.toggleTextActive]}>cm</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.toggleBtn, unit === 'lbs' && styles.toggleActive]}
-              onPress={() => setUnit('lbs')}
+              style={[styles.toggleBtn, unit === 'ft' && styles.toggleActive]}
+              onPress={() => setUnit('ft')}
             >
-              <Text style={[styles.toggleText, unit === 'lbs' && styles.toggleTextActive]}>lbs</Text>
+              <Text style={[styles.toggleText, unit === 'ft' && styles.toggleTextActive]}>ft</Text>
             </TouchableOpacity>
           </View>
 
           <NumberSelector
-            value={kg}
-            onChange={setKg}
-            min={30} max={200}
-            unit={unit === 'kg' ? 'kg' : Math.round(kg * 2.20462) + ' lbs'}
+            value={cm}
+            onChange={setCm}
+            min={1} max={300}
+            unit={unit === 'cm' ? 'cm' : feetVal}
           />
         </View>
 
         <View style={styles.footer}>
-          <PrimaryButton label="Continue" onPress={() => router.push('/onboarding/experience')} />
+          <PrimaryButton label="Continue" onPress={() => router.push('/onboarding/weight')} />
         </View>
       </View>
     </SafeAreaView>
