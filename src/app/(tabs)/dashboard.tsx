@@ -73,7 +73,7 @@ export default function DashboardScreen() {
               ))}
             </View>
 
-            <TouchableOpacity style={styles.heroBtn}>
+            <TouchableOpacity style={styles.heroBtn} onPress={() => router.push('/workout/1')}>
               <Text style={styles.heroBtnText}>View Workout →</Text>
             </TouchableOpacity>
           </LinearGradient>
@@ -197,8 +197,12 @@ export default function DashboardScreen() {
           </View>
 
           <View style={styles.listContainer}>
-            {recentWorkouts.map(w => (
-              <TouchableOpacity key={w.name} style={styles.listItem}>
+            {recentWorkouts.map((w, index) => (
+              <TouchableOpacity 
+                key={w.name} 
+                style={styles.listItem}
+                onPress={() => router.push(`/workout/${index + 1}`)}
+              >
                 <View style={styles.emojiBox}>
                   <Text style={styles.emojiText}>{w.emoji}</Text>
                 </View>
