@@ -26,7 +26,7 @@ export default function WorkoutsScreen() {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Workouts</Text>
-          <TouchableOpacity style={styles.logBtn}>
+          <TouchableOpacity style={styles.logBtn} onPress={() => router.push('/workout/create')}>
             <Plus size={16} color="#FFF" />
             <Text style={styles.logBtnText}>Log</Text>
           </TouchableOpacity>
