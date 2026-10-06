@@ -3,7 +3,7 @@ import { Award, Calendar, Check, ChevronLeft, Target, TrendingUp } from 'lucide-
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
-import { VictoryArea, VictoryAxis, VictoryChart, VictoryLine, VictoryScatter } from 'victory-native';
+import { VictoryArea, VictoryAxis, VictoryChart, VictoryLine, VictoryScatter, VictoryTooltip, VictoryVoronoiContainer } from 'victory-native';
 
 const goals = [
   { id: "1", name: "Bench Press 100kg", type: "Strength PR", progress: 85, current: 105, target: 100, unit: "kg", color: "#4F46E5", daysLeft: 45, status: "on-track", emoji: "🦍", exercise: "Bench Press" },
@@ -18,12 +18,12 @@ const getProgressData = (goal: any) => {
   const start = isLossGoal ? goal.target * 1.15 : goal.target * 0.7;
   const data = [];
   const points = 6;
-  
-  for(let i=0; i<points; i++) {
+
+  for (let i = 0; i < points; i++) {
     const fraction = i / (points - 1);
     let val = start + (goal.current - start) * fraction;
     if (i > 0 && i < points - 1) {
-       val += (i % 2 === 0 ? 1 : -1) * (goal.target * 0.015);
+      val += (i % 2 === 0 ? 1 : -1) * (goal.target * 0.015);
     }
     data.push({
       date: `Wk ${i + 1}`,
@@ -45,12 +45,12 @@ export default function GoalDetailScreen() {
   const circumference = 2 * Math.PI * ringRadius;
   const progressClamped = Math.max(0, Math.min(100, goal.progress));
   const strokeDashoffset = circumference - (circumference * progressClamped) / 100;
-  
+
   const isLossGoal = goal.type === "Body Weight";
   const remainingValue = Math.max(0, isLossGoal ? goal.current - goal.target : goal.target - goal.current);
   const startValue = Math.round(isLossGoal ? goal.target * 1.15 : goal.target * 0.7);
   const improvement = Math.round(goal.current - startValue);
-  
+
   const progressData = getProgressData(goal);
 
   return (
@@ -123,7 +123,23 @@ export default function GoalDetailScreen() {
                   height={180}
                   width={Math.max(400, progressData.length * 80)}
                   padding={{ top: 10, bottom: 25, left: 0, right: 0 }}
-                  domainPadding={{ x: 20, y: 20 }}
+                  domainPadding={{ x: 20, y: 30 }}
+                  containerComponent={
+                    <VictoryVoronoiContainer 
+                      voronoiDimension="x"
+                      voronoiBlacklist={["targetLine", "progressArea"]}
+                      labels={({ datum }) => `${datum.date}\n${datum.value} ${goal.unit}`}
+                      labelComponent={
+                        <VictoryTooltip
+                          renderInPortal={false}
+                          style={{ fill: "#F8FAFC", fontSize: 11, fontWeight: "600", textAnchor: "middle" }}
+                          flyoutStyle={{ fill: "#0F172A", stroke: goal.color, strokeWidth: 1.5, rx: 8, ry: 8 }}
+                          pointerLength={8}
+                          dy={-5}
+                        />
+                      }
+                    />
+                  }
                 >
                   <VictoryAxis
                     style={{
@@ -133,12 +149,14 @@ export default function GoalDetailScreen() {
                     }}
                   />
                   <VictoryLine
+                    name="targetLine"
                     y={() => goal.target}
                     style={{
                       data: { stroke: goal.color, strokeWidth: 1.5, strokeDasharray: "4,4", opacity: 0.5 }
                     }}
                   />
                   <VictoryArea
+                    name="progressArea"
                     data={progressData}
                     x="date"
                     y="value"
@@ -147,6 +165,7 @@ export default function GoalDetailScreen() {
                     }}
                   />
                   <VictoryScatter
+                    name="progressScatter"
                     data={progressData}
                     x="date"
                     y="value"
