@@ -116,6 +116,13 @@ export default function SettingsScreen() {
             </View>
             <Text style={styles.appVersion}>IntelliTracker v1.0.0</Text>
             <Text style={styles.appCredit}>Built with ❤️ & ☕ for fitness enthusiasts</Text>
+
+            <TouchableOpacity 
+              onPress={() => router.push('/states')}
+              style={{ marginTop: 24, padding: 12, backgroundColor: '#1E293B', borderRadius: 8, borderWidth: 1, borderColor: '#334155' }}
+            >
+              <Text style={{ color: '#94A3B8', fontWeight: '600' }}>🛠️ View System States</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
